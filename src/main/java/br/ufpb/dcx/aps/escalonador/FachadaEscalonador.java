@@ -11,4 +11,7 @@ public class FachadaEscalonador {
 
 	public void tick() {
 	}
+
+	public void adicionarProcesso(String nomeProcesso) {
+	}
 }

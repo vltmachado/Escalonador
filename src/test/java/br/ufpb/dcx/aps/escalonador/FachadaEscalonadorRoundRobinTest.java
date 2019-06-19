@@ -1,6 +1,7 @@
 package br.ufpb.dcx.aps.escalonador;
 
 import static org.junit.Assert.*;
+import static br.ufpb.dcx.aps.escalonador.TestHelper.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class FachadaEscalonadorRoundRobinTest {
 	@Test
 	public void t01_statusAposCriacao() {
 		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: [];"
+				+ "Processos: {};"
 				+ "Quantum: 3;"
 				+ "Tick: 0", 
 				fachada.getStatus());
@@ -27,10 +28,34 @@ public class FachadaEscalonadorRoundRobinTest {
 	public void t02_avancarTempo() {
 		fachada.tick();
 		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: [];"
+				+ "Processos: {};"
 				+ "Quantum: 3;"
 				+ "Tick: 1", 
 				fachada.getStatus());
 	}
 
+	@Test
+	public void t03_processoSemConcorrencia() {
+		fachada.adicionarProcesso("P1");
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: {Fila: [P1]};"
+				+ "Quantum: 3;"
+				+ "Tick: 0", 
+				fachada.getStatus());
+		
+		fachada.tick();
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: {Rodando: P1};"
+				+ "Quantum: 3;"
+				+ "Tick: 1", 
+				fachada.getStatus());
+		
+		//Estoura o quantum mas não tira o processo P1 da CPU, pois não há concorrência
+		ticks(fachada, 3);
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: {Rodando: P1};"
+				+ "Quantum: 3;"
+				+ "Tick: 4", 
+				fachada.getStatus());		
+	}
 }
