@@ -15,11 +15,21 @@ public class FachadaEscalonadorRoundRobinTest {
 	}
 
 	@Test
-	public void statusAposCriacao() {
-		assertEquals("Escalonador RoundRobin\n"
-				+ "Processos: []\n"
-				+ "Quantum: 3\n"
+	public void t01_statusAposCriacao() {
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: [];"
+				+ "Quantum: 3;"
 				+ "Tick: 0", 
+				fachada.getStatus());
+	}
+
+	@Test
+	public void t02_avancarTempo() {
+		fachada.tick();
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: [];"
+				+ "Quantum: 3;"
+				+ "Tick: 1", 
 				fachada.getStatus());
 	}
 

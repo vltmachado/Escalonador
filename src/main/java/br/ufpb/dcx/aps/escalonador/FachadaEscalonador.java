@@ -8,4 +8,7 @@ public class FachadaEscalonador {
 	public String getStatus() {
 		return null;
 	}
+
+	public void tick() {
+	}
 }
