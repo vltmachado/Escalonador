@@ -14,4 +14,7 @@ public class FachadaEscalonador {
 
 	public void adicionarProcesso(String nomeProcesso) {
 	}
+
+	public void finalizarProcesso(String nomeProcesso) {
+	}
 }

@@ -21,3 +21,7 @@ O Quantum representa o tempo máximo que um processo pode ocupar a CPU, se houve
 - 03: Adicionar um Processo no Escalonador
 
 Como não há concorrência na CPU, o quantum é ultrapassado mas o processo não perde a CPU.
+
+- 04: Finalizar um processo que está executando
+
+No próximo tick, ele perderá a CPU e não voltará para a fila de processos, portanto o escalonador ficará vazio.

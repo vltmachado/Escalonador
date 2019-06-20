@@ -58,4 +58,25 @@ public class FachadaEscalonadorRoundRobinTest {
 				+ "Tick: 4", 
 				fachada.getStatus());		
 	}
+	
+	@Test
+	public void t04_finalizarProcessoEmExecução() {
+		fachada.adicionarProcesso("P1");
+		ticks(fachada, 4);
+
+		fachada.finalizarProcesso("P1");
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: {Rodando: P1};"
+				+ "Quantum: 3;"
+				+ "Tick: 4", 
+				fachada.getStatus());
+
+		fachada.tick();//Só efetua a ação no próximo tick
+		assertEquals("Escalonador RoundRobin;"
+				+ "Processos: {};"
+				+ "Quantum: 3;"
+				+ "Tick: 5", 
+				fachada.getStatus());
+	}
+
 }
