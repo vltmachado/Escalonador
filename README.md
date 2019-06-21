@@ -37,3 +37,8 @@ Os processos se alternam na CPU a cada estouro do quantum.
 - 07: Dois processos concorrem pela CPU, a partir do tick 2
 
 Só considera o quantum a partir do próximo tick (3), quando há realmente concorrência.
+
+- 08: Processo executando finaliza antes de estourar o quantum
+
+O primeiro processo da fila ganha a CPU no próximo tick
+ 
