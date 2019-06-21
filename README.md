@@ -49,3 +49,9 @@ O processo executando não perde a CPU quando estourar o quantum
  - 09b: Finalizar processo esperando - cenário com três processos
 
 O processo que permanece na fila recebe a CPU quando estourar o quantum
+
+- 10: Modificar o quantum para 5
+
+Serão precisos mais ticks para alternar os processos.
+
+

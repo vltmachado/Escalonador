@@ -5,6 +5,9 @@ public class FachadaEscalonador {
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
 	}
 
+	public FachadaEscalonador(TipoEscalonador roundrobin, int quantum) {
+	}
+
 	public String getStatus() {
 		return null;
 	}
