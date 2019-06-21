@@ -1,6 +1,5 @@
 package br.ufpb.dcx.aps.escalonador;
 
-import static org.junit.Assert.*;
 import static br.ufpb.dcx.aps.escalonador.TestHelper.*;
 
 import org.junit.Before;
@@ -17,46 +16,26 @@ public class FachadaEscalonadorRoundRobinTest {
 
 	@Test
 	public void t01_statusAposCriacao() {
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {};"
-				+ "Quantum: 3;"
-				+ "Tick: 0", 
-				fachada.getStatus());
+		checaStatus(fachada, TipoEscalonador.RoundRobin, 3, 0);
 	}
 
 	@Test
 	public void t02_avancarTempo() {
 		fachada.tick();
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {};"
-				+ "Quantum: 3;"
-				+ "Tick: 1", 
-				fachada.getStatus());
+		checaStatus(fachada, TipoEscalonador.RoundRobin, 3, 1);
 	}
 
 	@Test
 	public void t03_processoSemConcorrencia() {
 		fachada.adicionarProcesso("P1");
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {Fila: [P1]};"
-				+ "Quantum: 3;"
-				+ "Tick: 0", 
-				fachada.getStatus());
+		checaStatusFila(fachada, TipoEscalonador.RoundRobin, 3, 0, "P1");
 		
 		fachada.tick();
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {Rodando: P1};"
-				+ "Quantum: 3;"
-				+ "Tick: 1", 
-				fachada.getStatus());
+		checaStatusRodando(fachada, TipoEscalonador.RoundRobin, 3, 1, "P1");
 		
 		//Estoura o quantum mas não tira o processo P1 da CPU, pois não há concorrência
 		ticks(fachada, 3);
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {Rodando: P1};"
-				+ "Quantum: 3;"
-				+ "Tick: 4", 
-				fachada.getStatus());		
+		checaStatusRodando(fachada, TipoEscalonador.RoundRobin, 3, 4, "P1");
 	}
 	
 	@Test
@@ -65,18 +44,31 @@ public class FachadaEscalonadorRoundRobinTest {
 		ticks(fachada, 4);
 
 		fachada.finalizarProcesso("P1");
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {Rodando: P1};"
-				+ "Quantum: 3;"
-				+ "Tick: 4", 
-				fachada.getStatus());
+		checaStatusRodando(fachada, TipoEscalonador.RoundRobin, 3, 4, "P1");
 
 		fachada.tick();//Só efetua a ação no próximo tick
-		assertEquals("Escalonador RoundRobin;"
-				+ "Processos: {};"
-				+ "Quantum: 3;"
-				+ "Tick: 5", 
-				fachada.getStatus());
+		checaStatus(fachada, TipoEscalonador.RoundRobin, 3, 5);
+	}
+
+	@Test
+	public void t05_alternarProcessosEmExecução() {
+		fachada.adicionarProcesso("P1");
+		fachada.adicionarProcesso("P2");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 1, "P1", "P2");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 3, "P1", "P2");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 4, "P2", "P1");
+		
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 6, "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 7, "P1", "P2");
 	}
 
 }

@@ -25,3 +25,7 @@ Como não há concorrência na CPU, o quantum é ultrapassado mas o processo nã
 - 04: Finalizar um processo que está executando
 
 No próximo tick, ele perderá a CPU e não voltará para a fila de processos, portanto o escalonador ficará vazio.
+
+- 05: Dois processos concorrem pela CPU, estourar o quantum para forçar a troca de processos
+
+Os processos se alternam na CPU a cada estouro do quantum.
