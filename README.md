@@ -33,3 +33,7 @@ Os processos se alternam na CPU a cada estouro do quantum.
 - 06: Três processos concorrem pela CPU, estourar o quantum para forçar a troca de processos
 
 Os processos se alternam na CPU a cada estouro do quantum.
+
+- 07: Dois processos concorrem pela CPU, a partir do tick 2
+
+Só considera o quantum a partir do próximo tick (3), quando há realmente concorrência.
