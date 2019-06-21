@@ -48,4 +48,13 @@ public class TestHelper {
 				fachada.getStatus());
 	}
 	
+	public static void checaStatusRodandoFilaBloqueio(FachadaEscalonador fachada, TipoEscalonador escalonador, 
+			int quantum, int ticks, String rodando, String fila, String bloqueados) {
+		assertEquals("Escalonador " + escalonador + ";"
+				+ "Processos: {Rodando: " + rodando + ", Fila: " + fila + ", Bloqueados: " + bloqueados + "};"
+				+ "Quantum: " + quantum + ";"
+				+ "Tick: " + ticks, 
+				fachada.getStatus());
+	}
+	
 }

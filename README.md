@@ -58,4 +58,6 @@ Serão precisos mais ticks para alternar os processos.
  
  Há um intervalo sem processos na CPU.
  
+ - 12: Processo executando bloqueia por I/O
  
+ No próximo tick, o primeiro processo da fila ganha a CPU e o Round robin funciona apenas entre os processos não bloqueados.

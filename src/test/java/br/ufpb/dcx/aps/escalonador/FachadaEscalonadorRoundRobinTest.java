@@ -239,4 +239,28 @@ public class FachadaEscalonadorRoundRobinTest {
 		ticks(fachada, 4);
 		checaStatusRodando(fachada, TipoEscalonador.RoundRobin, 3, 15, "P2");
 	}
+	
+
+	@Test
+	public void t12_bloqueioProcessoEmExecução() {
+		fachada.adicionarProcesso("P1");
+		fachada.adicionarProcesso("P2");
+		fachada.adicionarProcesso("P3");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 1, "P1", "P2", "P3");
+		
+		fachada.bloquearProcesso("P1");
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 1, "P1", "P2", "P3");
+
+		fachada.tick();
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 2, "P2", "[P3]", "[P1]");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 5, "P3", "[P2]", "[P1]");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 8, "P2", "[P3]", "[P1]");
+	}
+	
 }
