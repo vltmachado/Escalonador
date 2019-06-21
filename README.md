@@ -54,4 +54,8 @@ O processo que permanece na fila recebe a CPU quando estourar o quantum
 
 Serão precisos mais ticks para alternar os processos.
 
-
+ - 11: Dois processos passam pela CPU em momentos distintos
+ 
+ Há um intervalo sem processos na CPU.
+ 
+ 
