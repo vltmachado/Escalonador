@@ -42,3 +42,10 @@ Só considera o quantum a partir do próximo tick (3), quando há realmente conc
 
 O primeiro processo da fila ganha a CPU no próximo tick
  
+- 09a: Finalizar processo esperando - cenário com dois processos
+
+O processo executando não perde a CPU quando estourar o quantum
+
+ - 09b: Finalizar processo esperando - cenário com três processos
+
+O processo que permanece na fila recebe a CPU quando estourar o quantum
