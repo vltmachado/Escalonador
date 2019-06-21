@@ -51,7 +51,7 @@ public class FachadaEscalonadorRoundRobinTest {
 	}
 
 	@Test
-	public void t05_alternarProcessosEmExecução() {
+	public void t05_alternarDoisProcessosEmExecução() {
 		fachada.adicionarProcesso("P1");
 		fachada.adicionarProcesso("P2");
 
@@ -71,4 +71,31 @@ public class FachadaEscalonadorRoundRobinTest {
 		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 7, "P1", "P2");
 	}
 
+	@Test
+	public void t06_alternarDoisProcessosEmExecução() {
+		fachada.adicionarProcesso("P1");
+		fachada.adicionarProcesso("P2");
+		fachada.adicionarProcesso("P3");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 1, "P1", "P2", "P3");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 3, "P1", "P2", "P3");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 4, "P2", "P3", "P1");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 6, "P2", "P3", "P1");
+		
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 7, "P3", "P1", "P2");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 9, "P3", "P1", "P2");
+		
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 10, "P1", "P2", "P3");
+	}
 }

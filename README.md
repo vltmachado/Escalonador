@@ -29,3 +29,7 @@ No próximo tick, ele perderá a CPU e não voltará para a fila de processos, p
 - 05: Dois processos concorrem pela CPU, estourar o quantum para forçar a troca de processos
 
 Os processos se alternam na CPU a cada estouro do quantum.
+
+- 06: Três processos concorrem pela CPU, estourar o quantum para forçar a troca de processos
+
+Os processos se alternam na CPU a cada estouro do quantum.
