@@ -61,3 +61,8 @@ Serão precisos mais ticks para alternar os processos.
  - 12: Processo executando bloqueia por I/O
  
  No próximo tick, o primeiro processo da fila ganha a CPU e o Round robin funciona apenas entre os processos não bloqueados.
+
+ - 13: Processo bloqueado por I/O retoma para fila de espera
+ 
+ Após acabar o bloqueio por I/O, o processo vai para o final da fila Round robin.
+ 

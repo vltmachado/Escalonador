@@ -23,4 +23,8 @@ public class FachadaEscalonador {
 
 	public void bloquearProcesso(String nomeProcesso) {
 	}
+
+	public void retomarProcesso(String nomeProcesso) {
+		
+	}
 }
