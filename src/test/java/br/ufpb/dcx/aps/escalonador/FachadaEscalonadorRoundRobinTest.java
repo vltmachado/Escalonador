@@ -1,15 +1,15 @@
 package br.ufpb.dcx.aps.escalonador;
 
 import static br.ufpb.dcx.aps.escalonador.TestHelper.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
 
 public class FachadaEscalonadorRoundRobinTest {
 	
 	private FachadaEscalonador fachada;
 	
-	@Before
+	@BeforeEach
 	public void inicializar() {
 		fachada = new FachadaEscalonador(TipoEscalonador.RoundRobin);
 	}
@@ -334,6 +334,53 @@ public class FachadaEscalonadorRoundRobinTest {
 
 		ticks(fachada, 3);
 		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 14, "P2", "P1", "P3");
+	}
+
+	@Test
+	public void t15_validacoes() {
+		fachada.adicionarProcesso("P");
+		assertThrows(EscalonadorException.class, () -> fachada.adicionarProcesso("P"), 
+				"Já existe um processo com o nome P" );
+
+		assertThrows(EscalonadorException.class, () -> fachada.finalizarProcesso("A"), 
+				"Não existe um processo com o nome A" );
+
+		assertThrows(EscalonadorException.class, () -> fachada = new FachadaEscalonador(TipoEscalonador.RoundRobin, -1), 
+				"O quantum deve ser maior que zero" );
+
+		assertThrows(EscalonadorException.class, () -> fachada = new FachadaEscalonador(TipoEscalonador.RoundRobin, 0), 
+				"O quantum deve ser maior que zero" );
+
+		assertThrows(EscalonadorException.class, () -> fachada = new FachadaEscalonador(null), 
+				"O tipo do escalonador é obrigatório" );
+
+		assertThrows(EscalonadorException.class, () -> fachada.bloquearProcesso("A"), 
+				"Não existe um processo com o nome A" );
+
+		assertThrows(EscalonadorException.class, () -> fachada.adicionarProcesso(null), 
+				"O nome do processo é obrigatório" );
+
+		assertThrows(EscalonadorException.class, () -> fachada.retomarProcesso("A"), 
+				"Não existe um processo com o nome A" );
+
+		fachada.adicionarProcesso("Q");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 1, "P", "Q");
+
+		assertThrows(EscalonadorException.class, () -> fachada.bloquearProcesso("Q"), 
+				"O processo Q não pode ser bloqueado pois não está rodando" );
+
+		fachada.bloquearProcesso("P");
+		fachada.adicionarProcesso("R");
+		fachada.tick();
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 2, "Q", "[R]", "[P]");
+		
+		assertThrows(EscalonadorException.class, () -> fachada.retomarProcesso("Q"), 
+				"O processo Q não pode ser retomado pois não está bloqueado" );
+
+		assertThrows(EscalonadorException.class, () -> fachada.retomarProcesso("R"), 
+				"O processo R não pode ser retomado pois não está bloqueado" );
 	}
 
 }

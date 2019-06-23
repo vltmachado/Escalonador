@@ -70,4 +70,22 @@ Serão precisos mais ticks para alternar os processos.
  
  O algoritmo de Round robin considera a ordem de retomada em vez da ordem de criação dos processos.
  
+ - 15: Validações
  
+ Não permite processos com o mesmo nome.
+ 
+ Não permite finalizar processo inexistente.
+ 
+ O quantum não pode ser negativo.
+ 
+ O tipo do escalonador é obrigatório.
+ 
+ Não permite bloquear processo inexistente.
+ 
+ O nome do processo é obrigatório.
+ 
+ Não permite retomar processo inexistente.
+ 
+ Não pode bloquear processo que não esteja rodando.
+ 
+ Não permite retomar processo não bloqueado.
