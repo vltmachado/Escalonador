@@ -289,4 +289,51 @@ public class FachadaEscalonadorRoundRobinTest {
 		ticks(fachada, 3);
 		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 15, "P3", "P2", "P1");
 	}
+	
+	@Test
+	public void t14_modificarOrdemDosProcessosNaRetomada() {
+		fachada.adicionarProcesso("P1");
+		fachada.adicionarProcesso("P2");
+		fachada.adicionarProcesso("P3");
+
+		fachada.tick();
+		fachada.bloquearProcesso("P1");
+
+		fachada.tick();
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 2, "P2", "[P3]", "[P1]");
+		
+		fachada.bloquearProcesso("P2");
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 2, "P2", "[P3]", "[P1]");
+		
+		fachada.tick();
+		checaStatusRodandoBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 3, "P3", "P1", "P2");
+
+		fachada.bloquearProcesso("P3");
+		checaStatusRodandoBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 3, "P3", "P1", "P2");
+
+		fachada.tick();
+		checaStatusBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 4, "P1", "P2", "P3");
+
+		fachada.retomarProcesso("P2");
+		fachada.retomarProcesso("P1");
+
+		fachada.tick();
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 5, "P2", "[P1]", "[P3]");
+		
+		fachada.retomarProcesso("P3");
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.RoundRobin, 3, 5, "P2", "[P1]", "[P3]");
+		
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 6, "P2", "P1", "P3");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 8, "P1", "P3", "P2");
+
+		ticks(fachada, 3);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 11, "P3", "P2", "P1");
+
+		ticks(fachada, 3);
+		checaStatusRodandoFila(fachada, TipoEscalonador.RoundRobin, 3, 14, "P2", "P1", "P3");
+	}
+
 }

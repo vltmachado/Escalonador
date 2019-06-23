@@ -66,3 +66,8 @@ Serão precisos mais ticks para alternar os processos.
  
  Após acabar o bloqueio por I/O, o processo vai para o final da fila Round robin.
  
+ - 14: Bloquear 3 processos e retomar em ordem diferente
+ 
+ O algoritmo de Round robin considera a ordem de retomada em vez da ordem de criação dos processos.
+ 
+ 
