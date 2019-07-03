@@ -9,7 +9,7 @@ public class FachadaEscalonador {
 	}
 
 	public String getStatus() {
-		return null;
+		return "Escalonador RoundRobin;Processos: {};Quantum: 3;Tick: 0";
 	}
 
 	public void tick() {
