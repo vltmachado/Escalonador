@@ -1,6 +1,8 @@
 package br.ufpb.dcx.aps.escalonador;
 
 public class FachadaEscalonador {
+	
+	private int tick;
 
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
 	}
@@ -9,10 +11,11 @@ public class FachadaEscalonador {
 	}
 
 	public String getStatus() {
-		return "Escalonador RoundRobin;Processos: {};Quantum: 3;Tick: 0";
+		return "Escalonador RoundRobin;Processos: {};Quantum: 3;Tick: " + tick;
 	}
 
 	public void tick() {
+		tick++;
 	}
 
 	public void adicionarProcesso(String nomeProcesso) {
