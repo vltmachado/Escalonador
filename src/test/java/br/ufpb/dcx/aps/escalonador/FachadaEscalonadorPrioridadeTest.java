@@ -413,4 +413,35 @@ public class FachadaEscalonadorPrioridadeTest {
 		fachada.tick();
 		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 8, "P1");
 	}
+
+	@Test
+	public void t17_alternarDoisProcessosPorPrioridade() {
+		fachada.adicionarProcesso("P1", 2);
+
+		fachada.tick();
+		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 1, "P1");
+
+		fachada.adicionarProcesso("P2", 1);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 1, "P1", "P2");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 2, "P2", "P1");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 4, "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 5, "P2", "P1");
+		
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 7, "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 8, "P2", "P1");
+
+		fachada.finalizarProcesso("P2");
+
+		fachada.tick();
+		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 9, "P1");
+	}
 }
