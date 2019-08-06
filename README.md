@@ -99,3 +99,7 @@ Os processos não se alternam na CPU no estouro do quantum.
 - 17: Dois processos concorreriam pela CPU, mas tem prioridades diferentes, quando o processo de maior prioridade é adicionado, há troca de processos
 
 Depois disso, os processos não se alternam na CPU no estouro do quantum.
+
+- 18: Três processos concorreriam pela CPU, mas tem prioridades diferentes, quando o processo de maior prioridade é adicionado, há troca de processos
+
+Depois disso, os processos não se alternam na CPU no estouro do quantum.

@@ -386,6 +386,8 @@ public class FachadaEscalonadorPrioridadeTest {
 		assertThrows(EscalonadorException.class, () -> fachada.adicionarProcesso("P"), 
 				"O Escalonador com Prioridades exige que todos os processos tenham uma prioridade definida na adição" );
 
+		assertThrows(EscalonadorException.class, () -> fachada.adicionarProcesso("P", 5), 
+			"A prioridade de um processo deve ser menor ou igual a 4" );
 	}
 
 	@Test
@@ -443,5 +445,48 @@ public class FachadaEscalonadorPrioridadeTest {
 
 		fachada.tick();
 		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 9, "P1");
+	}
+
+	@Test
+	public void t18_alternarTresProcessosPorPrioridade() {
+		fachada.adicionarProcesso("P1", 3);
+
+		fachada.tick();
+		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 1, "P1");
+
+		fachada.adicionarProcesso("P2", 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 1, "P1", "P2");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 2, "P2", "P1");
+
+		fachada.adicionarProcesso("P3", 1);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 2, "P2", "P3", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 3, "P3", "P2", "P1");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 5, "P3", "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 6, "P3", "P2", "P1");
+		
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 8, "P3", "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 9, "P3", "P2", "P1");
+
+		fachada.finalizarProcesso("P2");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 10, "P3", "P1");
+
+		fachada.finalizarProcesso("P3");
+
+		fachada.tick();
+		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 11, "P1");
+
 	}
 }
