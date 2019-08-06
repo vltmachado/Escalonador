@@ -387,4 +387,30 @@ public class FachadaEscalonadorPrioridadeTest {
 				"O Escalonador com Prioridades exige que todos os processos tenham uma prioridade definida na adição" );
 
 	}
+
+	@Test
+	public void t16_naoAlternarDoisProcessosPorPrioridade() {
+		fachada.adicionarProcesso("P1", 2);
+		fachada.adicionarProcesso("P2", 1);
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 1, "P2", "P1");
+
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 3, "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 4, "P2", "P1");
+		
+		ticks(fachada, 2);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 6, "P2", "P1");
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 7, "P2", "P1");
+
+		fachada.finalizarProcesso("P2");
+
+		fachada.tick();
+		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 8, "P1");
+	}
 }
