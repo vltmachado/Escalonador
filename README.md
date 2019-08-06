@@ -89,3 +89,8 @@ Serão precisos mais ticks para alternar os processos.
  Não pode bloquear processo que não esteja rodando.
  
  Não permite retomar processo não bloqueado.
+
+Esses 15 testes iniciais são repetidos no Escalonador com Prioridades, no cenário onde todos os processos têm a mesma prioridade. A partir dos testes a seguir, existem processos com prioridades diferentes, o que mudar o comportamento do escalonador.
+
+
+
