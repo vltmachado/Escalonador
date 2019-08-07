@@ -489,4 +489,55 @@ public class FachadaEscalonadorPrioridadeTest {
 		checaStatusRodando(fachada, TipoEscalonador.Prioridade, 3, 11, "P1");
 
 	}
+
+	@Test
+	public void t19_bloqueioProcessoEmExecução() {
+		fachada.adicionarProcesso("P1", 1);
+		fachada.adicionarProcesso("P2", 2);
+		fachada.adicionarProcesso("P3", 2);
+
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 1, "P1", "P2", "P3");
+		
+		fachada.bloquearProcesso("P1");
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 1, "P1", "P2", "P3");
+
+		fachada.tick();
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.Prioridade, 3, 2, "P2", "[P3]", "[P1]");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.Prioridade, 3, 5, "P3", "[P2]", "[P1]");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.Prioridade, 3, 8, "P2", "[P3]", "[P1]");
+	}
+	
+	@Test
+	public void t20_retornoProcessoBloqueado() {
+		fachada.adicionarProcesso("P1", 1);
+		fachada.adicionarProcesso("P2", 2);
+		fachada.adicionarProcesso("P3", 2);
+
+		fachada.tick();
+		fachada.bloquearProcesso("P1");
+
+		ticks(fachada, 4);
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.Prioridade, 3, 5, "P3", "[P2]", "[P1]");
+
+		fachada.retomarProcesso("P1");
+		checaStatusRodandoFilaBloqueio(fachada, TipoEscalonador.Prioridade, 3, 5, "P3", "[P2]", "[P1]");
+		
+		fachada.tick();
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 6, "P1", "P2", "P3");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 9, "P1", "P2", "P3");
+		fachada.finalizarProcesso("P1");
+		
+		ticks(fachada, 3);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 12, "P2", "P3");
+
+		ticks(fachada, 3);
+		checaStatusRodandoFila(fachada, TipoEscalonador.Prioridade, 3, 15, "P3", "P2");
+	}
 }
