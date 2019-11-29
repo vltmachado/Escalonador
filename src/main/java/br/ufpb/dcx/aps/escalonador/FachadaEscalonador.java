@@ -5,62 +5,40 @@ import java.util.List;
 
 public class FachadaEscalonador {
 
-	private int tick;
-	private int quantum = 3;
-	private List<String> listaProcessos;
-	private List<String> processosRodando;
-	private StatusEscalonador status = new StatusEscalonador();
-	private TipoEscalonador tipo = TipoEscalonador.RoundRobin;
-	private String processoAtual;
+	private Escalonador escalonador = new Escalonador();
 
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
-		this.listaProcessos = new ArrayList();
-		this.processosRodando = new ArrayList();
-
+		escalonador = new EscalonadorRoundRobin(tipoEscalonador);
+		
 	}
-
+	
+	
 	public FachadaEscalonador(TipoEscalonador roundrobin, int quantum) {
+		escalonador = new EscalonadorRoundRobin(quantum);
+		
 	}
 
 	public String getStatus() {
-		if (listaProcessos.size() != 0 && tick == 0) {
-			return status.checaStatusFila(tipo, listaProcessos, quantum, tick);
-		}
-		//Teste 4
-		if(this.tick == 4) {
-			processosRodando.remove(0);
-			listaProcessos.remove(0);
-			status.checaStatusFila(tipo, listaProcessos, quantum, tick);
-			return status.checaStatusRodando(tipo, processoAtual, quantum, tick);
-			
-		}
-		// teste 3
-		if (processosRodando.size() != 0 ) {
-			return status.checaStatusRodando(tipo, processoAtual, quantum, tick);
-		}
-		
-		
-		//teste 1
-		return status.statusInicial(tipo, quantum, tick);
-		
+		return escalonador.getStatus();
+
 	}
 
 	public void tick() {
-		//teste 2
-		tick++;
+		escalonador.tick();
+		
+
 	}
- 
+
 	public void adicionarProcesso(String nomeProcesso) {
-		listaProcessos.add(nomeProcesso);
-		processosRodando.add(nomeProcesso);
-		processoAtual = processosRodando.get(0);
+		escalonador.adicionarProcesso(nomeProcesso);
+		
 	}
 
 	public void adicionarProcesso(String nomeProcesso, int prioridade) {
 	}
 
 	public void finalizarProcesso(String nomeProcesso) {
-		
+
 	}
 
 	public void bloquearProcesso(String nomeProcesso) {

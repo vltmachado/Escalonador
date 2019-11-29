@@ -47,7 +47,7 @@ public class FachadaEscalonadorRoundRobinTest {
 
 		fachada.tick();//Só efetua a ação no próximo tick
 		checaStatus(fachada, TipoEscalonador.RoundRobin, 3, 5);
-	}
+	} 
 
 	@Test
 	public void t05_alternarDoisProcessosEmExecução() {
