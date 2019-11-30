@@ -13,6 +13,7 @@ public class FachadaEscalonador {
 	private String rodando;
 	private final ArrayList<String> processoBloqueado;
 	private int controlador;
+	private String aFinalizar;
 
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
 		this.quantum = 3;
@@ -67,6 +68,15 @@ public class FachadaEscalonador {
 			this.controlador = this.tick;
 		}
 
+		if (this.aFinalizar != null) {
+			if (this.rodando == this.aFinalizar) {
+				this.rodando = null;
+
+			} else {
+				this.listaProcesso.remove(this.aFinalizar);
+			}
+		}
+
 		if (this.rodando == null) {
 			if (this.listaProcesso.size() != 0) {
 				this.rodando = this.listaProcesso.poll();
@@ -92,6 +102,7 @@ public class FachadaEscalonador {
 	}
 
 	public void finalizarProcesso(String nomeProcesso) {
+		this.aFinalizar = nomeProcesso;
 	}
 
 	public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
