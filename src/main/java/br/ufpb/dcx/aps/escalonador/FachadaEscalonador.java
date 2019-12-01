@@ -20,8 +20,8 @@ public class FachadaEscalonador {
 	private final ArrayList<String> processoBloqueado;
 	private int controlador;
 	private String aFinalizar;
-	protected String processoParaSerBloqueado;
-	protected String processoParaSerRetomado;
+	protected String aBloquear;
+	protected String aRetomado;
 
 	public FachadaEscalonador(TipoEscalonador tipoEscalonador) {
 		
@@ -107,20 +107,20 @@ public class FachadaEscalonador {
 		if (this.controlador == 0 && this.rodando != null && this.listaProcesso.size() > 0) {
 			this.controlador = this.tick;
 		}
-		if (processoParaSerBloqueado != null) {
-			if (this.rodando == this.processoParaSerBloqueado) {
+		if (aBloquear != null) {
+			if (this.rodando == this.aBloquear) {
 				this.rodando = null;
-				this.processoBloqueado.add(processoParaSerBloqueado);
+				this.processoBloqueado.add(aBloquear);
 				if (listaProcesso.size() > 0) {
 					rodando = listaProcesso.poll();
 				} else {
 					rodando = null;
 				}
 			} else {
-				this.listaProcesso.remove(processoParaSerBloqueado);
-				this.processoBloqueado.add(processoParaSerBloqueado);
+				this.listaProcesso.remove(aBloquear);
+				this.processoBloqueado.add(aBloquear);
 			}
-			processoParaSerBloqueado = null;
+			aBloquear = null;
 		}
 
 		if (processoRetomado.size() > 0) {
@@ -163,6 +163,8 @@ public class FachadaEscalonador {
 	}
 
 	public void adicionarProcesso(String nomeProcesso) {
+		
+		
 		if(nomeProcesso == null) {
 			throw new EscalonadorException();
 		}
@@ -170,22 +172,40 @@ public class FachadaEscalonador {
 			throw new EscalonadorException();
 
 		}
+		
+		if(tipoEscalonador == TipoEscalonador.Prioridade) {
+			throw new EscalonadorException();
+		}
+		if (tipoEscalonador == TipoEscalonador.MaisCurtoPrimeiro) {
+			throw new EscalonadorException();
+		}
 		this.listaProcesso.add(nomeProcesso);
 
 	}
 
 	public void adicionarProcesso(String nomeProcesso, int prioridade) {
+		if (tipoEscalonador == TipoEscalonador.RoundRobin) {
+			throw new EscalonadorException();
+		}
+		if (tipoEscalonador == TipoEscalonador.MaisCurtoPrimeiro) {
+			throw new EscalonadorException();
+		}
+		if(listaProcesso.contains(nomeProcesso) || nomeProcesso == null) {
+			throw new EscalonadorException();
+		}
+		if(prioridade >4) {
+			throw new EscalonadorException();
+		}
+		
+		this.listaProcesso.add(nomeProcesso);
 	}
 
 	public void finalizarProcesso(String nomeProcesso) {
 		if(!listaProcesso.contains(nomeProcesso) && rodando == null) {
 			throw new EscalonadorException();
 		}
-
 		this.aFinalizar = nomeProcesso;
-	}
 
-	public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
 	}
 
 	public void bloquearProcesso(String nomeProcesso) {
@@ -195,15 +215,8 @@ public class FachadaEscalonador {
 		if(rodando != nomeProcesso) {
 			throw new EscalonadorException();
 		}
-		this.processoParaSerBloqueado = nomeProcesso;
-		//for (int k = 0; k < this.listaProcesso.size(); k++) {
-			//if (this.listaProcesso.size() > 0) {
-				//this.listaProcesso.remove(nomeProcesso);
-				//this.processoBloqueado.add(nomeProcesso);
-		//precisou remover esse for que está no comentário
-			}
-		
-	
+		this.aBloquear = nomeProcesso;
+	}
 
 	public void retomarProcesso(String nomeProcesso) {
 		if(!processoBloqueado.contains(nomeProcesso)) {
@@ -212,5 +225,70 @@ public class FachadaEscalonador {
 		processoRetomado.add(nomeProcesso);
 
 	}
-	
+
+	public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
+
+		if (fila.contains(nomeProcesso) || nomeProcesso == null) {
+			throw new EscalonadorException();
+
+		}
+		if (duracao < 1) {
+			throw new EscalonadorException();
+		}
+		int maisCurto = Integer.MAX_VALUE;
+
+		if (fila.size() == 0) {
+			fila.add(nomeProcesso);
+			filaDuracao.add(duracao);
+		} else {
+
+			int menorPosicao = 0;
+
+			fila.add(nomeProcesso);
+			filaDuracao.add(duracao);
+			for (int i = 0; i < filaDuracao.size(); i++) {
+				if (filaDuracao.get(i) < maisCurto) {
+					maisCurto = filaDuracao.get(i);
+					menorPosicao = i;
+				}
+
+			}
+			if (menorPosicao > 0) {
+				String processoMenor = fila.remove(menorPosicao);
+				int processoMenorTempo = filaDuracao.remove(menorPosicao);
+				fila.add(0, processoMenor);
+				filaDuracao.add(0, processoMenorTempo);
+
+				for (int k = 0; duracao < k; k++) {
+					fila.add(0, nomeProcesso);
+					filaDuracao.add(0, duracao);
+
+				}
+			}
+
+		}
+	}
+
+	public TipoEscalonador escalonadorRoundRobin() {
+		return TipoEscalonador.RoundRobin;
+	}
+
+	public TipoEscalonador escalonadorPrioridade() {
+		return TipoEscalonador.Prioridade;
+	}
+
+	public TipoEscalonador escalonadorMaisCurtoPrimeiro() {
+		return TipoEscalonador.MaisCurtoPrimeiro;
+	}
+
+	public TipoEscalonador getTipoEscalonador() {
+		return tipoEscalonador;
+
+	}
+
+	public void setTipoEscalonador(TipoEscalonador tipoEscalonador) {
+		this.tipoEscalonador = tipoEscalonador;
+	}
+
 }
+
