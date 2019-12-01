@@ -64,11 +64,15 @@ public class FachadaEscalonador {
 				resultado += ", ";
 			}
 			resultado += "Fila: " + this.listaProcesso.toString();
-			if (this.processoBloqueado.size() > 0) {
-				resultado += ", Bloqueados: " + this.processoBloqueado.toString();
-			}
 
 		}
+		 if (this.processoBloqueado.size() > 0) {
+			 if (this.rodando != null) {
+					resultado += ", ";
+			 }
+				resultado += "Bloqueados: " + this.processoBloqueado.toString();
+			}
+		 
 		resultado += "};Quantum: " + this.quantum + ";";
 
 		resultado += "Tick: " + this.tick;
@@ -120,7 +124,7 @@ public class FachadaEscalonador {
 				this.listaProcesso.remove(aBloquear);
 				this.processoBloqueado.add(aBloquear);
 			}
-			aBloquear = null;
+			this.aBloquear = null;
 		}
 
 		if (processoRetomado.size() > 0) {
@@ -215,6 +219,7 @@ public class FachadaEscalonador {
 		if(rodando != nomeProcesso) {
 			throw new EscalonadorException();
 		}
+		
 		this.aBloquear = nomeProcesso;
 	}
 
