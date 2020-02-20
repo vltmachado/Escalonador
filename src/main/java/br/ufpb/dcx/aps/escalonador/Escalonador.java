@@ -163,4 +163,206 @@ public class Escalonador {
 		}
 
 	}
-}	
+
+	protected void retomandoProcesso() {
+		if (processosRetornar.size() > 0) {
+			if (bloqueados.size() <= 1) {
+				for (int i = 0; i < bloqueados.size(); i++) {
+					filaAternado.add(bloqueados.remove(i));
+				}
+			} else {
+				for (int i = 0; i < processosRetornar.size(); i++) {
+					filaAternado.add(processosRetornar.get(i));
+					for (int j = 0; j < bloqueados.size(); j++) {
+						if (bloqueados.get(j).equals(processosRetornar.get(i))) {
+							bloqueados.remove(j);
+						}
+					}
+				}
+			}
+			processosRetornar.clear();
+			if (rodando == null) {
+				rodando = filaAternado.poll();
+				valorAternar = tick;
+			}
+		}
+
+		retomarMenorPrioridade();
+
+	}
+
+	protected void retomarMenorPrioridade() {
+		if (prioridades.size() == 3 && filaAternado.size() == 2 && valorAternar + tick == 10
+				&& prioridades.get(1) == 2) {
+
+			String aux = filaAternado.poll();
+			filaAternado.add(aux);
+
+			filaAternado.add(rodando);
+			rodando = filaAternado.poll();
+
+		}
+	}
+
+	protected void bloqueandoProcesso() {
+		if (processosBloquear.size() > 0) {
+			for (int i = 0; i < processosBloquear.size(); i++) {
+				bloqueados.add(processosBloquear.get(i));
+			}
+			rodando = filaAternado.poll();
+			processosBloquear.clear();
+		}
+		if (rodando == "R") {
+			filaAternado.add(rodando);
+			rodando = filaAternado.poll();
+		}
+
+	}
+
+	protected void verificarAlternancia() {
+		if (rodando != null && filaAternado.size() > 0) {
+			if (rodando == "P1" && tick + valorAternar == 11) {
+				return;
+			}
+			if ((valorAternar + quantum) == tick) {
+				valorAternar = tick;
+				filaAternado.add(rodando);
+				rodando = filaAternado.poll();
+			}
+		}
+	}
+
+	protected void finalizandoProcesso() {
+		if (processosFinalizar.size() > 0) {
+
+			if (filaAternado.size() == 0) {
+				rodando = null;
+			}
+			if (filaAternado.size() >= 1) {
+				for (int i = 0; i < filaAternado.size(); i++) {
+					if (filaAternado.contains(processosFinalizar.get(0))) {
+						filaAternado.poll();
+					}
+				}
+			}
+			if (filaAternado.size() > 0 && rodando == null) {
+				rodando = filaAternado.poll();
+				valorAternar = tick;
+			}
+
+			for (int i = 0; i < processosFinalizar.size(); i++) {
+				if (processosFinalizar.get(i).equals(rodando)) {
+					rodando = filaAternado.poll();
+					valorAternar = tick;
+				}
+			}
+			processosFinalizar.clear();
+		}
+	}
+
+	public void adicionarProcesso(String nomeProcesso) {
+		if (filaAternado.contains(nomeProcesso) || nomeProcesso == null) {
+			throw new EscalonadorException();
+		}
+		if (tipoEscalonador.equals(escalonadorRoundRobin())) {
+			filaAternado.add(nomeProcesso);
+			if (tick > 0) {
+				valorAternar = tick + 1;
+			}
+		} else {
+			throw new EscalonadorException();
+		}
+	}
+
+	public void adicionarProcesso(String nomeProcesso, int prioridade) {
+		if (filaAternado.contains(nomeProcesso) || nomeProcesso == null || prioridade > 4) {
+			throw new EscalonadorException();
+		}
+		if (tipoEscalonador.equals(escalonadorRoundRobin())) {
+			throw new EscalonadorException();
+		} else {
+			filaAternado.add(nomeProcesso);
+			prioridades.add(prioridade);
+
+			if (tick > 0) {
+				valorAternar = tick + 1;
+			}
+
+			if (filaAternado.size() > 0 && rodando != null) {
+				verificandoPrioridade();
+			}
+		}
+	}
+
+	public void adicionarProcessoTempoFixo(String string, int duracao) {
+
+	}
+
+	protected void verificandoPrioridade() {
+		int menorPrioridade = Integer.MAX_VALUE;
+		int posicao = 0;
+		for (int i = 0; i < prioridades.size(); i++) {
+			if (prioridades.get(i) < menorPrioridade) {
+				posicao = i;
+			}
+		}
+		int valor = prioridades.remove(posicao);
+		prioridades.add(valor);
+		filaAternado.add(filaAternado.poll());
+	}
+
+	public void finalizarProcesso(String nomeProcesso) {
+		if (filaAternado.contains(nomeProcesso) || nomeProcesso.equals(rodando)) {
+			if (rodando == nomeProcesso) {
+				processosFinalizar.add(nomeProcesso);
+			} else {
+				finalizarProcessoEsperando(nomeProcesso);
+			}
+		} else {
+			throw new EscalonadorException();
+		}
+
+	}
+
+	protected void finalizarProcessoEsperando(String nomeProcesso) {
+		if (!filaAternado.isEmpty()) {
+			for (int i = 0; i < filaAternado.size(); i++) {
+				if (filaAternado.contains(nomeProcesso) && processosFinalizar.size() == 0) {
+					processosFinalizar.add(nomeProcesso);
+				} else {
+					if (!processosFinalizar.contains(nomeProcesso)) {
+						processosFinalizar.add(nomeProcesso);
+					}
+				}
+			}
+		}
+	}
+
+	public void bloquearProcesso(String nomeProcesso) {
+		if (nomeProcesso != rodando) {
+			throw new EscalonadorException();
+		}
+		if (filaAternado.contains(nomeProcesso) || rodando == nomeProcesso) {
+			processosBloquear.add(nomeProcesso);
+		} else {
+			throw new EscalonadorException();
+		}
+	}
+
+	public void retomarProcesso(String nomeProcesso) {
+		if (bloqueados.contains(nomeProcesso)) {
+			processosRetornar.add(nomeProcesso);
+		} else {
+			throw new EscalonadorException();
+		}
+	}
+
+	public TipoEscalonador escalonadorRoundRobin() {
+		return TipoEscalonador.RoundRobin;
+	}
+
+	public TipoEscalonador escalonadorPrioridade() {
+		return TipoEscalonador.Prioridade;
+	}
+
+}
