@@ -16,14 +16,14 @@ public class Escalonador {
 	private String rodando;
 	private boolean prioridadesIguais, filaAtualizada = false;
 
-	private Queue<String> filaAternado = new LinkedList<>();
+	private Queue<String> filaAternado = new LinkedList<String>();
 	private List<String> bloqueados = new ArrayList<String>();
 
 	private List<String> processosFinalizar = new ArrayList<String>();
 	private List<String> processosBloquear = new ArrayList<String>();
 	private List<String> processosRetornar = new ArrayList<String>();
 
-	private List<Integer> prioridades = new ArrayList<>();
+	private List<Integer> prioridades = new ArrayList<Integer>();
 
 	public Escalonador() {
 	}
