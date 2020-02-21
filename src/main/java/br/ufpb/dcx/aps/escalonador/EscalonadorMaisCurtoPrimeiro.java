@@ -7,8 +7,8 @@ public class EscalonadorMaisCurtoPrimeiro extends Escalonador {
 	StatusEscalonadorMCP status = new StatusEscalonadorMCP();
 
 	private int tick;
-	private List<String> fila = new ArrayList<>();
-	private List<Integer> duracoes = new ArrayList<>();
+	private List<String> fila = new ArrayList<String>();
+	private List<Integer> duracoes = new ArrayList<Integer>();
 
 	private String processoRodando;
 
