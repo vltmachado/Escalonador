@@ -1,5 +1,3 @@
-package br.ufpb.dcx.aps.escalonador;
-
 import java.util.List;
 import java.util.Queue;
 
