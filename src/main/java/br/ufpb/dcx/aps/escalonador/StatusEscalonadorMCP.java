@@ -1,6 +1,5 @@
 package br.ufpb.dcx.aps.escalonador;
 import java.util.List;
-
 public class StatusEscalonadorMCP {
 
 	public String statusInicialMCP(TipoEscalonador tipo, int quantum, int tick) {
@@ -20,5 +19,5 @@ public class StatusEscalonadorMCP {
 		return "Escalonador " + tipo + ";Processos: {Rodando: " + rodando + ", Fila: " + processos + "};Quantum: "
 				+ quantum + ";Tick: " + tick;
 	}
-
 }
+
