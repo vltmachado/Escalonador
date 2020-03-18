@@ -1,5 +1,5 @@
 package br.ufpb.dcx.aps.escalonador.Command;
 
-public class Command {
+public interface Command {
 
 }
