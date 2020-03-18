@@ -17,8 +17,10 @@ public class FachadaEscalonador {
 			escalonador = new EscalonadorRoundRobin(tipoEscalonador);
 		} else if (tipoEscalonador.equals(escalonador.escalonadorPrioridade())) {
 			escalonador = new EscalonadorPrioridade(tipoEscalonador);
-		} else {
+		} else if (tipoEscalonador.equals(escalonador.escalonadorMaisCurtoPrimeiro())) {
 			escalonador = new EscalonadorMaisCurtoPrimeiro(tipoEscalonador);
+		}else {
+			escalonador = new EscalonadorFifo(tipoEscalonador);
 		}
 	}
 
