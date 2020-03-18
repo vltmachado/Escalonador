@@ -46,3 +46,50 @@ public class EscalonadorFifo extends Escalonador{
 		escalonarNovoProcesso();
 		
 	}
+	private void escalonarNovoProcesso() {
+		if (duracaoFixa == tick && proRodando != null) {
+			if (fila.size() > 0) {
+				proRodando = fila.remove(0);
+				duracaoRodando = duracaoProcesso.remove(0);
+			} else {
+				proRodando = null;
+				duracaoRodando = 0;
+			}
+			if (duracaoRodando > 0) {
+				duracaoFixa = tick + duracaoRodando;
+			}
+		}
+	}
+
+	private void escalonarPrimeiroProcesso() {
+		if (fila.size() > 0) {
+			if (proRodando == null) {
+
+				proRodando = fila.remove(0);
+				duracaoRodando = duracaoProcesso.remove(0);
+				duracaoFixa = tick + duracaoRodando;
+			}
+		}
+	}
+
+	public void adicionarProcesso(String nomeProcesso) {
+		throw new EscalonadorException();
+
+	}
+	
+	public void adicionarProcesso(String nomeProcesso, int prioridade) {
+		throw new EscalonadorException();
+	}
+
+	public void adicionarProcessoTempoFixo(String nomeProcesso, int duracao) {
+		if (fila.contains(nomeProcesso) || nomeProcesso == null) {
+			throw new EscalonadorException();
+		}
+		if(duracao < 1) {
+			throw new EscalonadorException();
+		}
+		fila.add(nomeProcesso);
+		duracaoProcesso.add(duracao);
+	}
+
+}
