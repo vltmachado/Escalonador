@@ -2,24 +2,17 @@ package br.ufpb.dcx.aps.escalonador.Command;
 
 import br.ufpb.dcx.aps.escalonador.Escalonador;
 
-public class ADDPTFCommand implements Command {
-
+public class RetomarPCommand implements Command {
 	private Escalonador escalonador;
 	private String processo;
-	private int duracao;
-
-	public ADDPTFCommand(String nomeProcesso) {
-		this.processo = nomeProcesso;
-	}
-
-	public ADDPTFCommand(String nomeProcesso, int duracaoProcesso) {
-		this.processo = nomeProcesso;
-		this.duracao = duracaoProcesso;
+	
+	public RetomarPCommand(String processo) {
+		this.processo = processo;
 	}
 
 	@Override
 	public String executar() {
-		getEscalonador().adicionarProcessoTempoFixo(processo, duracao);
+		getEscalonador().retomarProcesso(processo);
 		return null;
 	}
 
@@ -32,5 +25,6 @@ public class ADDPTFCommand implements Command {
 	public void setEscalonador(Escalonador escalonador) {
 		this.escalonador = escalonador;
 	}
+
 
 }

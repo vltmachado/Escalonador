@@ -16,14 +16,14 @@ public class Escalonador {
 	private String rodando;
 	private boolean prioridadesIguais, filaAtualizada = false;
 
-	private Queue<String> filaAternado = new LinkedList<String>();
+	private Queue<String> filaAternado = new LinkedList<>();
 	private List<String> bloqueados = new ArrayList<String>();
 
 	private List<String> processosFinalizar = new ArrayList<String>();
 	private List<String> processosBloquear = new ArrayList<String>();
 	private List<String> processosRetornar = new ArrayList<String>();
 
-	private List<Integer> prioridades = new ArrayList<Integer>();
+	private List<Integer> prioridades = new ArrayList<>();
 
 	public Escalonador() {
 	}
@@ -364,5 +364,8 @@ public class Escalonador {
 	public TipoEscalonador escalonadorPrioridade() {
 		return TipoEscalonador.Prioridade;
 	}
-
+	
+	public TipoEscalonador escalonadorMaisCurtoPrimeiro() {
+		return TipoEscalonador.MaisCurtoPrimeiro;
+	}
 }
