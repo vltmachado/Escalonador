@@ -3,7 +3,7 @@ import br.ufpb.dcx.aps.escalonador.Escalonador;
 
 public class BloquearPCommand implements Command{
 	
-	private Escalonador Escalonador;
+	private Escalonador escalonador;
 	private String processo;
 	
 	public BloquearPCommand(String processo) {
