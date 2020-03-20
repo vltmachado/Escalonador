@@ -1,11 +1,12 @@
 package br.ufpb.dcx.aps.escalonador.Command;
+
 import br.ufpb.dcx.aps.escalonador.Escalonador;
 
-public class BloquearPCommand implements Command{
-	
+public class BloquearPCommand implements Command {
+
 	private Escalonador escalonador;
 	private String processo;
-	
+
 	public BloquearPCommand(String processo) {
 		this.processo = processo;
 	}
